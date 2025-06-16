@@ -1,0 +1,8 @@
+{
+    "initial-message": "Xin chào, tôi có thể giúp gì cho bạn",
+
+    "bot-name": "HnpawsBot",
+    "bot-avt": "./assets/bot_avt.jpg",
+
+    "user-avt": "./assets/user_avt.jpg"
+}
