@@ -1,21 +1,21 @@
 import streamlit as st
-import json, validators, spotipy, re
+import validators, spotipy, re
 import pandas as pd
-from spotipy.oauth2 import SpotifyClientCredentials
-import requests
+from spotipy.oauth2 import SpotifyOAuth
+# import os
+
+# os.system('cls')
 
 SPOTIFY_CLIENT_ID = st.secrets["SPOTIFY_CLIENT_ID"]
 SPOTIFY_CLIENT_SECRET = st.secrets["SPOTIFY_CLIENT_SECRET"]
 
 # SPOTIFY API
-auth_response = requests.post(
-    'https://accounts.spotify.com/api/token',
-    data={'grant_type': 'client_credentials'},
-    auth=(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)
-)
-
-access_token = auth_response.json().get('access_token')
-sp = spotipy.Spotify(auth=access_token)
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
+    client_id = SPOTIFY_CLIENT_ID,
+    client_secret = SPOTIFY_CLIENT_SECRET,
+    redirect_uri = "https://spotify-playlist-mbti.streamlit.app/callback",
+    scope = "playlist-read-private"
+))
 
 # GET PLAYLIST ID BY URL
 @st.cache_data
@@ -24,13 +24,12 @@ def extract_playlist_id(url):
     return match.group(1) if match else None
 
 # GET PLAYLIST INFO
-@st.cache_data
 def playlist_info(playlist):
     track_ids = [item['track']['id'] for item in playlist['tracks']['items'] if item['track'] and item['track']['id']]
 
     # split into 100 songs for each
     chunks = [track_ids[i:i+100] for i in range(0, len(track_ids), 100)]
-
+    print(chunks)
     all_features = []
     for chunk in chunks:
         try:
@@ -70,6 +69,8 @@ if playlist_url:
         
         # show playlist info
         print(playlist_info(playlist))
+        print(sp.audio_features(['11dFghVXANMlKmJXsNCbNl']))
+
     else:
         st.warning("URL không hợp lệ hoặc không thể tìm thấy")
 else:
