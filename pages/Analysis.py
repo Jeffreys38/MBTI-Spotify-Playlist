@@ -60,19 +60,16 @@ def playlist_info(playlist):
 playlist_url = st.text_input("Dán link playlist Spotify vào đây", placeholder = "https://open.spotify.com/playlist/4SyqPrpD1yGm33Ychi3ac0?si=b3b9d2e173c646ed")
 
 if playlist_url:
-    st.write(playlist_url)
     if validators.url(playlist_url):
         playlist_id = extract_playlist_id(playlist_url)
-        st.write(playlist_id)
         playlist = sp.playlist(playlist_id)
-        st.write(playlist)
         
         st.write(playlist["name"])
-        st.image(playlist["images"][0]["url"], caption="Playlist của bạn")
+        # st.image(playlist["images"][0]["url"], caption="Playlist của bạn")
         
         # show playlist info
-        st.write(playlist_info(playlist))
-        st.write(sp.audio_features(['11dFghVXANMlKmJXsNCbNl']))
+        # st.write(playlist_info(playlist))
+        # st.write(sp.audio_features(['11dFghVXANMlKmJXsNCbNl']))
         os.write("hello")
 
     else:
