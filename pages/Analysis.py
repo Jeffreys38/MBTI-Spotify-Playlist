@@ -61,6 +61,7 @@ playlist_url = st.text_input("Dán link playlist Spotify vào đây", placeholde
 
 if playlist_url:
     if validators.url(playlist_url):
+        st.write(123333)
         playlist_id = extract_playlist_id(playlist_url)
         playlist = sp.playlist(playlist_id)
         
